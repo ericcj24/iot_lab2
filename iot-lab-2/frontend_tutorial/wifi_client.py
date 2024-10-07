@@ -2,7 +2,7 @@ import configparser
 import socket
 
 config = configparser.ConfigParser()
-config.read('congif.ini')
+config.read('config.ini')
 HOST = config.get('Raspberry Pi', 'ip_address') # IP address of your Raspberry PI
  # IP address of your Raspberry PI
 PORT = 65431          # The port used by the server

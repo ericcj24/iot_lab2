@@ -4,7 +4,7 @@ import time
 
 
 config = configparser.ConfigParser()
-config.read('congif.ini')
+config.read('config.ini')
 HOST = config.get('Raspberry Pi', 'ip_address') # IP address of your Raspberry PI
 PORT = 65431          # Port to listen on (non-privileged ports are > 1023)
 
