@@ -1,6 +1,10 @@
+import configparser
 import socket
 
-HOST = "192.168.86.21" # IP address of your Raspberry PI
+config = configparser.ConfigParser()
+config.read('congif.ini')
+HOST = config.get('Raspberry Pi', 'ip_address') # IP address of your Raspberry PI
+ # IP address of your Raspberry PI
 PORT = 65431          # The port used by the server
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:

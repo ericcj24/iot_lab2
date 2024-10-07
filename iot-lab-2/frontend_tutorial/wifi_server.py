@@ -1,8 +1,11 @@
+import configparser
 import socket
 import time
 
 
-HOST = "192.168.86.21" # IP address of your Raspberry PI
+config = configparser.ConfigParser()
+config.read('congif.ini')
+HOST = config.get('Raspberry Pi', 'ip_address') # IP address of your Raspberry PI
 PORT = 65431          # Port to listen on (non-privileged ports are > 1023)
 
 """
