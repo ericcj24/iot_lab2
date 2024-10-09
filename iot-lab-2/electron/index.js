@@ -2,7 +2,7 @@ document.onkeydown = updateKey;
 document.onkeyup = resetKey;
 
 var server_port = 65431;
-var server_addr = "192.168.86.21";   // the IP address of your Raspberry PI
+var server_addr = "192.168.86.247";   // the IP address of your Raspberry PI
 
 function client(){
 
@@ -18,9 +18,20 @@ function client(){
     
     // get the data from the server
     client.on('data', (data) => {
-        document.getElementById("bluetooth").innerHTML = data;
-        document.getElementById("temperature").innerHTML = data;
-        console.log(data.toString());
+        //document.getElementById("bluetooth").innerHTML = data;
+        
+
+        const json_data = JSON.parse(data.toString());
+
+        document.getElementById("temperature").innerHTML = json_data['temperature'];
+        document.getElementById("direction").innerHTML = json_data['car_direction'];
+        document.getElementById("speed").innerHTML = json_data['speed'];
+        document.getElementById("distance").innerHTML = json_data['distance_travel'];
+
+
+        console.log(JSON.stringify(json_data));
+
+
         client.end();
         client.destroy();
     });
@@ -73,7 +84,6 @@ function resetKey(e) {
 
 // update data for every 50ms
 function update_data(){
-    console.log('here!');
     setInterval(function(){
         // get image from python server
         client();

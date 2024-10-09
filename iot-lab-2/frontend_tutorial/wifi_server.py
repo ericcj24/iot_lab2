@@ -1,13 +1,13 @@
 import configparser
 import socket
 import time
+import json
 
 
 config = configparser.ConfigParser()
 config.read('config.ini')
 HOST = config.get('Raspberry Pi', 'ip_address') # IP address of your Raspberry PI
 PORT = 65431          # Port to listen on (non-privileged ports are > 1023)
-
 """
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((HOST, PORT))
@@ -32,9 +32,12 @@ def read_cpu_temperature():
     # Read the CPU temperature
     with open('/sys/class/thermal/thermal_zone0/temp', 'r') as f:
         temp = float(f.read()) / 1000  # Convert from millidegrees to degrees Celsius
-    return temp        
+    return temp
 
 
+def encode_data(temperature):
+    data = {'temperature': temperature,'car_direction': "None", 'speed':0, 'distance_travel': 0}
+    return json.dumps(data)
 
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -49,8 +52,11 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             print("connected by: ", addr)
         
 
-            data = read_cpu_temperature()
-            conn.sendall(str(data).encode())
+            temperature = read_cpu_temperature()
+
+            data = encode_data(temperature)
+
+            conn.sendall(data.encode())
             time.sleep(2)
 
     except Exception as e: 
