@@ -5,7 +5,6 @@ import json
 from picarx import Picarx
 from time import sleep
 from tracking import StateTracker
-import readchar
 
 
 config = configparser.ConfigParser()
@@ -58,7 +57,7 @@ def handle_arrows(conn):
             #px.set_cam_tilt_angle(60)
             px.set_dir_servo_angle(-30)
             px.forward(10)
-            sleep(1)
+            sleep(2)
         elif (data == "right\r\n"):
             px.set_dir_servo_angle(30)
             px.forward(10)
@@ -66,7 +65,7 @@ def handle_arrows(conn):
         else:
             px.set_dir_servo_angle(0)
             px.backward(10)
-            sleep(2)
+            sleep(1)
         px.forward(0)
         # conn.sendall(data)
 

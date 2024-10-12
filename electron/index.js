@@ -2,7 +2,7 @@ document.onkeydown = updateKey;
 document.onkeyup = resetKey;
 
 var server_port = 65431;
-var server_addr = "10.0.0.30";   // the IP address of your Raspberry PI
+var server_addr = "10.0.1.138";   // the IP address of your Raspberry PI
 
 function client(){
 
@@ -66,7 +66,17 @@ function send_data(direction) {
         client.write(`${input}\r\n`);
     });
 
-    client.on('data', () => {
+    client.on('data', (data) => {
+        const json_data = JSON.parse(data.toString());
+
+        document.getElementById("Temperature").innerHTML = json_data['Temperature'];
+        document.getElementById("Orientation").innerHTML = json_data['Orientation'];
+        document.getElementById("X").innerHTML = json_data['X'];
+        document.getElementById("Y").innerHTML = json_data['Y'];
+        document.getElementById("DistanceTraveled").innerHTML = json_data['Distance Traveled From Start'];
+
+
+        console.log(JSON.stringify(json_data));
         client.end();
         client.destroy();
     });
