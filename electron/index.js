@@ -23,10 +23,11 @@ function client(){
 
         const json_data = JSON.parse(data.toString());
 
-        document.getElementById("temperature").innerHTML = json_data['temperature'];
-        document.getElementById("direction").innerHTML = json_data['car_direction'];
-        document.getElementById("speed").innerHTML = json_data['speed'];
-        document.getElementById("distance").innerHTML = json_data['distance_travel'];
+        document.getElementById("Temperature").innerHTML = json_data['Temperature'];
+        document.getElementById("Orientation").innerHTML = json_data['Orientation'];
+        document.getElementById("X").innerHTML = json_data['X'];
+        document.getElementById("Y").innerHTML = json_data['Y'];
+        document.getElementById("DistanceTraveled").innerHTML = json_data['Distance Traveled From Start'];
 
 
         console.log(JSON.stringify(json_data));
@@ -43,7 +44,7 @@ function client(){
 
 }
 
-function handleArrowClick(direction) {
+function send_data(direction) {
     const net = require('net');
     console.log('Arrow clicked:', direction);
     switch(direction) {
@@ -82,22 +83,22 @@ function updateKey(e) {
     if (e.keyCode == '87') {
         // up (w)
         document.getElementById("upArrow").style.color = "green";
-        send_data("87");
+        send_data("up");
     }
     else if (e.keyCode == '83') {
         // down (s)
         document.getElementById("downArrow").style.color = "green";
-        send_data("83");
+        send_data("down");
     }
     else if (e.keyCode == '65') {
         // left (a)
         document.getElementById("leftArrow").style.color = "green";
-        send_data("65");
+        send_data("left");
     }
     else if (e.keyCode == '68') {
         // right (d)
         document.getElementById("rightArrow").style.color = "green";
-        send_data("68");
+        send_data("right");
     }
 }
 

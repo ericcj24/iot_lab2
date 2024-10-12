@@ -1,8 +1,0 @@
-node_modules
-iot-lab-2/frontend_tutorial/config.ini
-electron
-.vscode/
-.__pycache__/
-iot-lab-2/package-lock.json
-iot-lab-2/package.json
-.DS_Store

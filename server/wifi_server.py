@@ -4,6 +4,7 @@ import time
 import json
 from picarx import Picarx
 from time import sleep
+from tracking import StateTracker
 import readchar
 
 
@@ -38,8 +39,9 @@ def read_cpu_temperature():
     return temp
 
 
-def encode_data(temperature):
-    data = {'temperature': temperature,'car_direction': "None", 'speed':0, 'distance_travel': 0}
+def encode_data(temperature, state: StateTracker):
+    data = {'Temperature': temperature, 'Orientation': state.state.orientation, 
+            'X': state.state.x, 'Y': state.state.y, 'Distance Traveled From Start': state.get_distance_traveled()}
     return json.dumps(data)
 
 def handle_arrows(conn):
@@ -49,45 +51,53 @@ def handle_arrows(conn):
         print(data)
         if (data == "forward\r\n"):
             px.set_dir_servo_angle(0)
-            px.forward(80)
+            px.forward(10)
+            sleep(1)
             # px.set_cam_tilt_angle(60)
         elif (data == "left\r\n"):
             #px.set_cam_tilt_angle(60)
             px.set_dir_servo_angle(-30)
-            px.forward(80)
+            px.forward(10)
+            sleep(1)
         elif (data == "right\r\n"):
             px.set_dir_servo_angle(30)
-            px.forward(80)
+            px.forward(10)
+            sleep(2)
         else:
             px.set_dir_servo_angle(0)
-            px.backward(80)
-
-        sleep(0.5)
+            px.backward(10)
+            sleep(2)
         px.forward(0)
         # conn.sendall(data)
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.bind((HOST, PORT))
-    s.listen()
+def initialize_server():
+    state = StateTracker()
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind((HOST, PORT))
+        s.listen()
 
-    print('start')
+        print('start')
 
-    try:
-        while True:
-            conn, addr = s.accept()
-            print("connected by: ", addr)
+        try:
+            while True:
+                conn, addr = s.accept()
+                print("connected by: ", addr)
 
-            handle_arrows(conn)
-#             temperature = read_cpu_temperature()
+                handle_arrows(conn)
+                temperature = read_cpu_temperature()
 
-#            data = encode_data(temperature)
+                data = encode_data(temperature, state)
 
-#            conn.sendall(data.encode())
-            time.sleep(2)
+                conn.sendall(data.encode())
+                time.sleep(2)
 
-    except Exception as e:
-        print("Error occurred:", e)
-    finally:
-        print("Closing socket for info pannel.")
-        conn.close()
-        s.close()
+        except Exception as e:
+            print("Error occurred:", e)
+        finally:
+            print("Closing socket for info pannel.")
+            conn.close()
+            s.close()
+
+
+if __name__ == '__main__':
+    initialize_server()
