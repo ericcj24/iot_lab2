@@ -4,6 +4,8 @@ import time
 import json
 from picarx import Picarx
 from time import sleep
+import readchar
+
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -20,12 +22,12 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             print("server recv from: ", clientInfo)
             data = client.recv(1024)      # receive 1024 Bytes of message in binary format
             if data != b"":
-                print(data)     
+                print(data)
                 client.sendall(data) # Echo back to client
-    except: 
+    except:
         print("Closing socket for interactive")
         client.close()
-        s.close()    
+        s.close()
 """
 
 
@@ -64,7 +66,6 @@ def handle_arrows(conn):
         px.forward(0)
         # conn.sendall(data)
 
-
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((HOST, PORT))
     s.listen()
@@ -75,22 +76,18 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         while True:
             conn, addr = s.accept()
             print("connected by: ", addr)
-        
+
             handle_arrows(conn)
-            temperature = read_cpu_temperature()
+#             temperature = read_cpu_temperature()
 
-            data = encode_data(temperature)
+#            data = encode_data(temperature)
 
-            conn.sendall(data.encode())
+#            conn.sendall(data.encode())
             time.sleep(2)
 
-    except Exception as e: 
+    except Exception as e:
         print("Error occurred:", e)
     finally:
         print("Closing socket for info pannel.")
         conn.close()
-        s.close()    
-
-
-        
-
+        s.close()
