@@ -10,7 +10,7 @@ class State():
 driveCommand = namedtuple('Command', ['orientation', 'direction', 'distance'])
 
 class StateTracker():
-    def __init__(self, goal_state=State('Forward', 100, 100)) -> None:
+    def __init__(self) -> None:
         self.state = State('Forward', 0, 0) # X is horizontal, Y is Vertical axis
         self.car_turn_length = 44
         self.car_turn_forward_length = 16

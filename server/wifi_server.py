@@ -5,7 +5,6 @@ import json
 from picarx import Picarx
 from time import sleep
 from tracking import StateTracker
-import readchar
 
 
 config = configparser.ConfigParser()
