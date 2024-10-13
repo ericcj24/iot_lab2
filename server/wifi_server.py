@@ -44,7 +44,7 @@ def encode_data(temperature, state: StateTracker):
             'X': state.state.x, 'Y': state.state.y, 'Distance Traveled From Start': state.get_distance_traveled()}
     return json.dumps(data)
 
-def handle_arrows(conn):
+def handle_arrows(conn, state: StateTracker):
     px = Picarx()
     data = conn.recv(1024).decode()    # receive 1024 Bytes of message in binary format
     if data:
@@ -53,20 +53,24 @@ def handle_arrows(conn):
             px.set_dir_servo_angle(0)
             px.forward(10)
             sleep(1)
+            state.update_state_position('Forward')
             # px.set_cam_tilt_angle(60)
         elif (data == "left\r\n"):
             #px.set_cam_tilt_angle(60)
             px.set_dir_servo_angle(-30)
             px.forward(10)
             sleep(1)
+            state.update_state_position('Left')
         elif (data == "right\r\n"):
             px.set_dir_servo_angle(30)
             px.forward(10)
             sleep(2)
+            state.update_state_position('Right')
         else:
             px.set_dir_servo_angle(0)
             px.backward(10)
             sleep(2)
+            state.update_state_position('Backward')
         px.forward(0)
         # conn.sendall(data)
 
@@ -83,7 +87,7 @@ def initialize_server():
                 conn, addr = s.accept()
                 print("connected by: ", addr)
 
-                handle_arrows(conn)
+                handle_arrows(conn, state)
                 temperature = read_cpu_temperature()
 
                 data = encode_data(temperature, state)
