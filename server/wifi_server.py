@@ -58,7 +58,7 @@ def handle_arrows(conn, state: StateTracker):
             #px.set_cam_tilt_angle(60)
             px.set_dir_servo_angle(-30)
             px.forward(10)
-            sleep(1)
+            sleep(2)
             state.update_state_position('Left')
         elif (data == "right\r\n"):
             px.set_dir_servo_angle(30)
@@ -68,8 +68,9 @@ def handle_arrows(conn, state: StateTracker):
         else:
             px.set_dir_servo_angle(0)
             px.backward(10)
-            sleep(2)
+            sleep(1)
             state.update_state_position('Backward')
+        px.set_dir_servo_angle(0)
         px.forward(0)
         # conn.sendall(data)
 
